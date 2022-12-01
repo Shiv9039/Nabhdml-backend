@@ -20,16 +20,15 @@ const swaggerUi = require('swagger-ui-express');
 // Import middleware
 const errorMiddleware = require('./middleware/error');
 
-
-
 // config 
 dotenv.config({path:"config/config.env"});
+
 // Handling uncaught variable error
-process.on("uncaughtException", (err)=>{
-    console.log(`Error: ${err.message}`);
-    console.log(`Shutting down the server due to uncaught Exception`);
-    process.exit(1);
-});
+// process.on("uncaughtException", (err)=>{
+//     console.log(`Error: ${err.message}`);
+//     console.log(`Shutting down the server due to uncaught Exception`);
+//     process.exit(1);
+// });
 
 // Connecting to database 
 connectDatabase();
