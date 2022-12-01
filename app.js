@@ -24,11 +24,11 @@ const errorMiddleware = require('./middleware/error');
 dotenv.config({path:"config/config.env"});
 
 // Handling uncaught variable error
-// process.on("uncaughtException", (err)=>{
-//     console.log(`Error: ${err.message}`);
-//     console.log(`Shutting down the server due to uncaught Exception`);
-//     process.exit(1);
-// });
+process.on("uncaughtException", (err)=>{
+    console.log(`Error: ${err.message}`);
+    console.log(`Shutting down the server due to uncaught Exception`);
+    process.exit(1);
+});
 
 // Connecting to database 
 connectDatabase();
@@ -66,7 +66,11 @@ const options = {
             },
             {
                 url:'https://nabh-dlm-backend.herokuapp.com/'
+            },
+            {
+                url:'https://wh3dpzvf74.execute-api.us-east-2.amazonaws.com/production/'
             }
+
         ]
     },
     apis: [
