@@ -19,6 +19,6 @@ functions:
         - http: ANY /{proxy+}
         - http: ANY /
     environment:
-          DB_URL: mongodb+srv://blossom:blossomnabh123@blossomnabhdlm.pcbka1a.mongodb.net/blossomnabhdlm
+          DB_URL: mongodb+srv://Nabh:Nabh123@cluster0.rbcigf9.mongodb.net/nabh-dlm
   
 
