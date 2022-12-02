@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv =require('dotenv');
 const connectDatabase = require('./config/dbConfig');
+
 // Route imports
 const classRoute = require('./routes/classRoute');
 const subjectRoute = require('./routes/subjectRoute');
@@ -8,12 +9,16 @@ const chapterRoute = require('./routes/chapterRoute');
 const topicRoute = require('./routes/topicRoute');
 const questionRoute = require('./routes/questionRoute');
 const userRoute = require('./routes/userRoute');
-// const paytmRoute = require('./routes/paytmRoute');
+const paytmRoute = require('./routes/paytmRoute');
 const testDetailRoute = require('./routes/testDetailRoute');
 const studentRoute = require('./routes/studentRoute');
 const studentTestRoute = require('./routes/studentTestRoute');
 const schoolSessionRoute = require('./routes/schoolSessionRoute')
 const cookieParser = require('cookie-parser');
+const cron = require('node-cron');
+const studentModel = require('./models/studentModel');
+
+
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
@@ -100,12 +105,42 @@ app.use('', questionRoute);
 app.use('', userRoute);
 app.use('',studentRoute);
 app.use('',studentTestRoute);
-// app.use('', paytmRoute);
+app.use('', paytmRoute);
 app.use('', testDetailRoute);
 app.use('',schoolSessionRoute)
 
 // Middleware for error
 app.use(errorMiddleware);
+
+// This is cron job for making student subscription inactive when subscription ends
+cron.schedule('50 59 23 * * *', async () => {
+
+    const student = await studentModel.find({
+        $and: [
+            {
+                subscriptionStatus: {$eq: 'active'}
+            },
+            {
+                subscriptionEndDate: {$lte: new Date()}
+            }
+        ]
+    },
+    { _id: 1, subscriptionStatus: 1, subscriptionEndDate: 1 })
+
+    student = await studentModel.bulkWrite(
+        student.map((data) => (
+            {
+                updateOne: {
+                    filter: { _id: data._id },
+                    update: { $set: { subscriptionStatus: 'inactive' } }
+                }
+            })
+        )
+    )
+},
+{
+    timezone: 'Asia/Kolkata'
+})
 
 module.exports = app;
 // module.exports.handler = serverless(app);

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerStudent, loginStudent, getStudentsCount, singleStudentDetail, studentDetails } = require('../controllers/studentController');
+const { registerStudent, loginStudent, updateStudentDetail, getStudentsCount, singleStudentDetail, studentDetails, updateStudentPassword } = require('../controllers/studentController');
 
 /**
  * @swagger
@@ -36,8 +36,58 @@ const { registerStudent, loginStudent, getStudentsCount, singleStudentDetail, st
  *                              type: string
  *                          currentSessionId:
  *                              type: string
+ *                          subscriptionStatus:
+ *                              type: string
+ *                          planType:
+ *                              type: string
+ *                          subscriptionStartDate:
+ *                              type: date
+ *                          subscriptionEndDate:
+ *                              type: date
  *                  token:
  *                      type: string
+ */
+
+/**
+ * @swagger
+ *  components:
+ *      schema:
+ *          students:
+ *              type: object
+ *              properties:
+ *                  success:
+ *                      type: boolean
+ *                  student: 
+ *                      type: object
+ *                      properties:
+ *                          firstName:
+ *                              type: string
+ *                          lastName:
+ *                              type: string
+ *                          fatherName:
+ *                              type: string
+ *                          motherName:
+ *                              type: string
+ *                          dob:
+ *                              type: date
+ *                          email:
+ *                              type: string
+ *                          mobileNumber:
+ *                              type: string
+ *                          className:
+ *                              type: string
+ *                          gender:
+ *                              type: string
+ *                          currentSessionId:
+ *                              type: string
+ *                          subscriptionStatus:
+ *                              type: string
+ *                          planType:
+ *                              type: string
+ *                          subscriptionStartDate:
+ *                              type: date
+ *                          subscriptionEndDate:
+ *                              type: date
  */
 
 /**
@@ -257,5 +307,95 @@ router.route('/single/student/detail/:_id').get(singleStudentDetail);
  *                  description: Variable mismatch or maybe url not match
  */
 router.route('/All/students/details').get(studentDetails);
+
+/**
+ * @swagger
+ *  /update/student/{id}:
+ *      put:
+ *          tags:
+ *              -   Student api
+ *          summary: This api update student details.
+ *          description: This api update student details based on student Id.
+ *          parameters:
+ *              -   in: path
+ *                  name: id
+ *                  required: true
+ *                  description: This parameter take student object id
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              firstName:
+ *                                  type: string
+ *                              lastName:
+ *                                  type: string
+ *                              fatherName:
+ *                                  type: string
+ *                              motherName:
+ *                                  type: string
+ *                              dob:
+ *                                  type: date
+ *                              email:
+ *                                  type: string
+ *                              mobileNumber:
+ *                                  type: string
+ *                              className:
+ *                                  type: string
+ *                              gender:
+ *                                  type: string
+ *                              currentSessionId:
+ *                                  type: string
+ *                              subscriptionStatus:
+ *                                  type: string
+ *                              planType:
+ *                                  type: string
+ *                              subscriptionStartDate:
+ *                                  type: date
+ *                              subscriptionEndDate:
+ *                                  type: date  
+ *          responses:
+ *              200:
+ *                  description: successful
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#components/schema/students'
+ */
+router.route('/update/student/:id').put(updateStudentDetail);
+
+/**
+ * @swagger
+ *  /update/password/{id}:
+ *      put:
+ *          tags:
+ *              -   Student api
+ *          summary: This api update student password.
+ *          description: This api update student password based on student Id.
+ *          parameters:
+ *              -   in: path
+ *                  name: id
+ *                  required: true
+ *                  description: This parameter take student object id
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              password:
+ *                                  type: string
+ *          responses:
+ *              200:
+ *                  description: successful
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#components/schema/students'
+ */
+router.route('/update/password/:id').put(updateStudentPassword);
 
 module.exports = router;

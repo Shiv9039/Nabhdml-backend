@@ -36,6 +36,46 @@ exports.loginStudent = catchAsyncError(async(req, res, next)=>{
     sendToken(student, 200, res);
 });
 
+// update student by id
+exports.updateStudentDetail = catchAsyncError(async (req, res, next)=>{
+    let student = await studentModel.findById(req.params.id);
+    if (!student) {
+        return next(new ErrorHandler("Student not found", 404));
+    }
+
+    student = await studentModel.findByIdAndUpdate(req.params.id, req.body,{
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    });
+
+    res.status(200).json({
+        success:true,
+        student
+    })
+});
+
+// update student password by id
+exports.updateStudentPassword = catchAsyncError(async (req, res, next)=>{
+    let student = await studentModel.findById(req.params.id);
+
+    if (!student) {
+        return next(new ErrorHandler("Student not found", 404));
+    }
+
+    if (!req.body.password) {
+        return next(new ErrorHandler("Please provide password", 404));
+    }
+    
+    student.password = req.body.password
+    student = await student.save();
+
+    res.status(200).json({
+        success:true,
+        student
+    })
+});
+
 // get total number of student in school
 exports.getStudentsCount = catchAsyncError(async(req,res)=> {
     const count = await studentModel.countDocuments();

@@ -40,7 +40,8 @@ const studentSchema = new mongoose.Schema({
         required: [true, 'Please Enter mobile number']
     },
     className: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "classes",
         required: [true, 'Please Enter class Name']
     },
     gender: {
@@ -49,7 +50,22 @@ const studentSchema = new mongoose.Schema({
     },
     currentSessionId:{
         type: mongoose.Types.ObjectId,
+        ref: "school_sessions",
         required: [true, 'Please enter current school session of student']
+    },
+    subscriptionStatus: {
+        type: String,
+        default: 'inactive'
+    },
+    planType: {
+        type: String,
+        default: 'normal'
+    },
+    subscriptionStartDate: {
+        type: Date
+    },
+    subscriptionEndDate: {
+        type: Date
     }
 },
 { 
