@@ -96,11 +96,11 @@ exports.setPaymentStatus = catchAsyncError(async (req, res, next)=>{
                         
                         result.STUDENT_ID = userInfo.studentId;
 
-                        const data = await paymentModel.create(result);
+                        const paytmData = await paymentModel.create(result);
 
-                        if(data.STATUS == 'TXN_SUCCESS') {
+                        if(paytmData.STATUS == 'TXN_SUCCESS') {
                             
-                            let studentData = await studentModel.findById(data.STUDENT_ID);
+                            let studentData = await studentModel.findById(paytmData.STUDENT_ID);
                             if (!studentData) {
                                 return next(new ErrorHandler("student not found", 404));
                             }
@@ -133,7 +133,7 @@ exports.setPaymentStatus = catchAsyncError(async (req, res, next)=>{
                                     subscriptionEndDate: new Date(currentDate.setFullYear(currentDate.getFullYear() + userInfo.year))
                                 }
                             }
-                            const subscriptionSuccessful = await studentModel.findByIdAndUpdate(data.STUDENT_ID, planDetails,
+                            const subscriptionDetail = await studentModel.findByIdAndUpdate(paytmData.STUDENT_ID, planDetails,
                                 {
                                     new: true,
                                     runValidators: true,
@@ -141,10 +141,26 @@ exports.setPaymentStatus = catchAsyncError(async (req, res, next)=>{
                                 }
                             );
 
-                            if (subscriptionSuccessful) {
-                                
-                                res.redirect(`http://localhost:3000/`)    
+                            if (subscriptionDetail) {
+                                res.status(200).json({
+                                    success:true,
+                                    paytmData,
+                                    subscriptionDetail,
+                                    planDetails
+                                })
+                                // res.redirect(`http://localhost:3000/`)    
+                            } else {
+                                res.status(200).json({
+                                    success:false,
+                                    message: "your payment have successful. If your subscription is not activated then contact to this number 1234567890 for activate your subscription"
+                                })
                             }
+                        } else {
+                            // res.redirect(`http://localhost:3000/`)
+                            res.status(200).json({
+                                success:false,
+                                paytmData
+                            })
                         }
                     });
                 });
