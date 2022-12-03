@@ -142,25 +142,26 @@ exports.setPaymentStatus = catchAsyncError(async (req, res, next)=>{
                             );
 
                             if (subscriptionDetail) {
-                                res.status(200).json({
-                                    success:true,
-                                    paytmData,
-                                    subscriptionDetail,
-                                    planDetails
-                                })
-                                // res.redirect(`http://localhost:3000/`)    
+                                // res.status(200).json({
+                                //     success:true,
+                                //     paytmData,
+                                //     subscriptionDetail,
+                                //     planDetails
+                                // })
+                                res.redirect(`http://localhost:3000/subscription-activated`)    
                             } else {
-                                res.status(200).json({
-                                    success:false,
-                                    message: "your payment have successful. If your subscription is not activated then contact to this number 1234567890 for activate your subscription"
-                                })
+                                // res.status(200).json({
+                                //     success:false,
+                                //     message: "your payment have successful. If your subscription is not activated then contact to this number 1234567890 for activate your subscription"
+                                // })
+                                res.redirect(`http://localhost:3000/subscription-not-activated`)
                             }
                         } else {
-                            // res.redirect(`http://localhost:3000/`)
-                            res.status(200).json({
-                                success:false,
-                                paytmData
-                            })
+                            // res.status(200).json({
+                            //     success:false,
+                            //     paytmData
+                            // })
+                            res.redirect(`http://localhost:3000/transaction-failed`)
                         }
                     });
                 });
