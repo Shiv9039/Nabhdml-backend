@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv =require('dotenv');
 const connectDatabase = require('./config/dbConfig');
+const cors = require('cors');
 
 // Route imports
 const classRoute = require('./routes/classRoute');
@@ -52,7 +53,6 @@ connectDatabase();
 // });
 
 const app = express();
-const cors = require('cors');
 
 app.use(express.json());
 app.use(cors());
